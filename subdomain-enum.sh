@@ -20,7 +20,8 @@ subfinder -silent -d $domain -all -o 3.txt
 findomain -t $domain -u 4.txt 
 
 #crt.sh
-curl -s https://crt.sh/\?q\=\%.$domain\&output\=json | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u | tee 5.txt
+curl -s https://crt.sh/\?q\=%25.example.com\&output\=json | jq . | grep 'name_value' | awk '{print $2}' | sed -e 's/"//g'| sed -e 's/,//g' |  awk '{gsub(/\\n/,"\n")}1' | sort -u | tee 5.txt
+| tee 5.txt
 
 #github-subdomains
 github-subdomains -d $domain -t /root/tokens -k -o 6.txt 
